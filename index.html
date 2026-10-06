@@ -469,9 +469,9 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
             notes:["Flat bench. Lower under control to chest level, press without locking hard. Dumbbells let each arm work evenly."],
             log:L(["Weight","Reps"],3) },
         ]},
-        { label:"C", note:"Superset — alternate C1 & C2", items:[
-          { id:"C1", name:"Dumbbell Walking Lunge", tempo:"2-0-1-0", scheme:"10 reps / leg @ RPE 6–7", sets:2,
-            straight:"C2",
+        { label:"C", items:[
+          { id:"C", name:"Dumbbell Walking Lunge", tempo:"2-0-1-0", scheme:"10 reps / leg @ RPE 6–7", sets:2,
+            rests:"75 s", timer:rest(75),
             sub:"Knee-friendly: if lunging bothers the knee, swap to Reverse Lunges (step backward — much gentler on the kneecap) or a Dumbbell Glute Bridge.",
             notes:["A dumbbell in each hand. Long step, back knee toward the floor, drive through the front heel. 10 each leg = 1 set.",
                    "Keep the front shin fairly vertical and weight in the heel to spare the knee."],
@@ -480,8 +480,10 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
               notes:["Step backward into the lunge instead of forward — much gentler on the kneecap and easier to control. 10 each leg = 1 set.",
                      "Light dumbbells or bodyweight. Weight in the front heel, torso tall."] },
             log:L(["Weight","Reps/leg"],2) },
-          { id:"C2", name:"Dumbbell Overhead Press", tempo:"2-0-1-0", scheme:"8–12 reps @ RPE 6–7", sets:2,
-            rests:"90 s, then back to C1", timer:rest(90),
+        ]},
+        { label:"D", items:[
+          { id:"D", name:"Dumbbell Overhead Press", tempo:"2-0-1-0", scheme:"8–12 reps @ RPE 6–7", sets:2,
+            rests:"90 s", timer:rest(90),
             sub:"Back-smart: pressing overhead tempts the low back to arch. Squeeze the glutes, keep ribs down and brace. If the back still arches, press seated with back support.",
             notes:["Standing or seated. Ribs down, press overhead without arching the low back."],
             swap:{ name:"Seated Dumbbell Overhead Press",
@@ -489,8 +491,8 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
               notes:["Sit on an upright bench with back support so the spine can't arch. Press overhead, ribs down, controlled."] },
             log:L(["Weight","Reps"],2) },
         ]},
-        { label:"D", items:[
-          { id:"D", name:"Front Plank", tempo:"hold", scheme:"30–45 s hold × 3 @ RPE 6–7", sets:3,
+        { label:"E", items:[
+          { id:"E", name:"Front Plank", tempo:"hold", scheme:"30–45 s hold × 3 @ RPE 6–7", sets:3,
             rests:"30 s", timer:ivl(3,"Hold",45,"sustain","Rest",30,"rest"),
             notes:["Elbows under shoulders, squeeze glutes, flat line head to heels. Stop the set when your hips sag — quality over seconds."],
             log:L(["Hold s"],3) },
@@ -582,14 +584,16 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
             notes:["Bench at ~30°. Press up and slightly together, lower under control to the upper chest."],
             log:L(["Weight","Reps"],3) },
         ]},
-        { label:"C", note:"Superset — alternate C1 & C2", items:[
-          { id:"C1", name:"Farmer's Carry", tempo:"walk", scheme:"30–40 m @ RPE 6–7", sets:3,
-            straight:"C2",
+        { label:"C", items:[
+          { id:"C", name:"Farmer's Carry", tempo:"walk", scheme:"30–40 m @ RPE 6–7", sets:3,
+            rests:"75 s", timer:rest(75),
             notes:["A heavy dumbbell/kettlebell in each hand. Tall posture, braced core, steady steps. This is everyday carrying strength.",
                    "Back-friendly when done tall and braced — stand upright, don't lean; it actually trains the core that protects the spine."],
             log:L(["Load/hand","Dist m"],3) },
-          { id:"C2", name:"Russian Kettlebell Swing", tempo:"explosive", scheme:"12–15 reps @ RPE 6–7", sets:3,
-            rests:"90 s, then back to C1", timer:rest(90),
+        ]},
+        { label:"D", items:[
+          { id:"D", name:"Russian Kettlebell Swing", tempo:"explosive", scheme:"12–15 reps @ RPE 6–7", sets:3,
+            rests:"90 s", timer:rest(90),
             sub:"Back-smart: the power comes from snapping the hips, never from the lower back. Keep a flat spine, brace, and finish by squeezing the glutes — don't lean back at the top. Start light and only add load once the movement is clean.",
             notes:["Hinge and snap the hips to float the bell to chest height — it's a hip drive, not a shoulder raise. Swing to eye level, no higher.",
                    "If swings aggravate the back, swap to a Hip Thrust or Glute Bridge for the day."],
@@ -598,8 +602,8 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
               notes:["Floor glute bridge — hips up, squeeze hard, control down. All the glute drive of the swing with zero spinal load.","Add a dumbbell across the hips to progress."] },
             log:L(["Weight","Reps"],3) },
         ]},
-        { label:"D", items:[
-          { id:"D", name:"Side Plank", tempo:"hold", scheme:"20–30 s / side × 2 @ RPE 6–7", sets:2,
+        { label:"E", items:[
+          { id:"E", name:"Side Plank", tempo:"hold", scheme:"20–30 s / side × 2 @ RPE 6–7", sets:2,
             rests:"switch sides", timer:ivl(4,"Hold",30,"sustain","Switch",15,"rest"),
             notes:["Elbow under shoulder, hips stacked and lifted, straight line. Timer runs 4 holds — alternate sides each one."],
             log:L(["Hold s"],2) },
