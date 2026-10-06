@@ -286,6 +286,11 @@
    Keyed by exercise-name slug. Add IDs here to embed a demo; any exercise
    without an entry falls back to a YouTube search link automatically. */
 const VIDEOS = {
+  "goblet-squat":"7-80HiXX1K8",
+  "box-squat-sit-to-bench":"7-80HiXX1K8",
+  "dumbbell-overhead-press":"WrQqtezYNn8",
+  "seated-dumbbell-overhead-press":"WrQqtezYNn8",
+  "front-plank":"pvIjsG5Svck",
   "trap-bar-deadlift":"6GsNwor-ATk",
   "band-assisted-push-up":"Sz1w_Dm_ayI",
   "lat-pulldown":"AtcrCtnah98",
@@ -306,19 +311,19 @@ const STRENGTH_WARMUP = { title:"Warm-up", secs:[
   {h:"1 · Cardio", items:["5 min easy jog / cycle / row to raise the heart rate"]},
   {h:"2 · Mobility", items:["World's Greatest Stretch — 3–4 reps × 2–3 / side"]},
   {h:"3 · Run mechanics", items:[
-    "Band-Resisted Knee Drive — 5–10 × 2–3 / side (pause 1–2 s at top)",
+    "High-Knee March in place — 20–30 steps × 2–3 (tall posture, drive each knee up under control — no band needed)",
     "Bench-Supported Single-Leg Glute Bridge Hold — 15–30 s × 2–3 / side"]},
   {h:"4 · Activation (3 rounds)", items:[
     "Box Jumps × 3 (build height each round, 2-foot jumps)",
     "T-Push Up × 4 (hands on bench if needed)"]},
-  {h:"5 · Prep sets", items:[
-    "Build to your working weight: light 10–20 reps → moderate 5–10 → heavy a couple → working set. Prep sets don't count as working sets."]}
+  {h:"5 · Ease into the first lift", items:[
+    "No separate ramp-up sets needed — the warm-up above has already prepped you. Just make the FIRST set of your first exercise lighter and controlled (about half your target weight), then settle into your working weight from set 2. This protects a cold knee or back without adding extra sets."]}
 ]};
 const STRENGTH_COOLDOWN = { title:"Cool-down", secs:[{h:"", items:[
   "Passive Hang on Bar — 1–2 min total, vary grips",
   "Door-Jam Stretch — 30–45 s / side × 2",
-  "Half-Kneeling Quad Stretch — 30–45 s / side × 2",
-  "Supine Trunk Twist — 20–30 s / side × 2",
+  {t:"Half-Kneeling Quad Stretch — 30–45 s / side × 2", vid:"7tCLTsTLMew"},
+  {t:"Supine Trunk Twist — 20–30 s / side × 2", vid:"ElKoMMaTPCM"},
   "Focused breathing — belly up on inhale, down on exhale"]}]};
 const COND_WARMUP_A = { title:"Warm-up", secs:[{h:"", items:[
   "Joint rotations 1–2 min (neck → ankles)",
@@ -340,7 +345,7 @@ const STRENGTH_WARMUP_2 = { title:"Warm-up", secs:[
     "Runners Knee Drive — 5 × 2–3 / leg",
     "Single-Leg Knee Lifts — 20–30 s × 2–3 / leg (build from every 2nd step to every step)"]},
   {h:"4 · Activation (3 rounds)", items:["Broad Jump × 3 / side","Push-Up Groiner × 3"]},
-  {h:"5 · Prep sets", items:["Build to working weight: light 10–20 → moderate 5–10 → heavy a couple → working set."]}
+  {h:"5 · Ease into the first lift", items:["No separate ramp-up sets needed — make the FIRST set of your first exercise lighter and controlled (about half target), then settle into your working weight from set 2."]}
 ]};
 const STRENGTH_COOLDOWN_2 = { title:"Cool-down", secs:[{h:"", items:[
   "Barefoot Squat Sit — 1–2 min total",
@@ -368,7 +373,7 @@ const STRENGTH_WARMUP_3 = { title:"Warm-up", secs:[
   {h:"2 · Mobility", items:["World's Greatest Stretch — 2–3 reps × 2–3 / side"]},
   {h:"3 · Prehab", items:["Bent-Knee Copenhagen Plank — 5–10 s hold × 2–3 / side"]},
   {h:"4 · Activation (3 rounds)", items:["Box Jumps × 3 (build height each round)","T-Push Up × 4 (hands on bench if needed)"]},
-  {h:"5 · Prep sets", items:["Build to working weight: light 10–20 → moderate 5–10 → heavy a couple → working set."]}
+  {h:"5 · Ease into the first lift", items:["No separate ramp-up sets needed — make the FIRST set of your first exercise lighter and controlled (about half target), then settle into your working weight from set 2."]}
 ]};
 const PUSH_WARMUP_A = { title:"Warm-up", secs:[{h:"", items:[
   "Foam roll hamstrings, glutes & back — 5 min",
@@ -456,13 +461,13 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
               sub:"Sore-day variant of the Goblet Squat.",
               notes:["Sit back to a bench or box set at a pain-free height, pause, then stand. Same pattern, controlled depth, far kinder to the knee.",
                      "Light goblet load or just bodyweight."] },
-            log:L(["Weight","Reps","RPE"],3) },
+            log:L(["Weight","Reps"],3) },
         ]},
         { label:"B", items:[
           { id:"B", name:"Dumbbell Bench Press", tempo:"2-0-1-0", scheme:"8–12 reps @ RPE 6–7", sets:3,
             rests:"90 s", timer:rest(90),
             notes:["Flat bench. Lower under control to chest level, press without locking hard. Dumbbells let each arm work evenly."],
-            log:L(["Weight","Reps","RPE"],3) },
+            log:L(["Weight","Reps"],3) },
         ]},
         { label:"C", note:"Superset — alternate C1 & C2", items:[
           { id:"C1", name:"Dumbbell Walking Lunge", tempo:"2-0-1-0", scheme:"10 reps / leg @ RPE 6–7", sets:2,
@@ -474,7 +479,7 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
               sub:"Sore-day variant of the Walking Lunge.",
               notes:["Step backward into the lunge instead of forward — much gentler on the kneecap and easier to control. 10 each leg = 1 set.",
                      "Light dumbbells or bodyweight. Weight in the front heel, torso tall."] },
-            log:L(["Weight","Reps/leg","RPE"],2) },
+            log:L(["Weight","Reps/leg"],2) },
           { id:"C2", name:"Dumbbell Overhead Press", tempo:"2-0-1-0", scheme:"8–12 reps @ RPE 6–7", sets:2,
             rests:"90 s, then back to C1", timer:rest(90),
             sub:"Back-smart: pressing overhead tempts the low back to arch. Squeeze the glutes, keep ribs down and brace. If the back still arches, press seated with back support.",
@@ -482,13 +487,13 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
             swap:{ name:"Seated Dumbbell Overhead Press",
               sub:"Sore-day variant of the Overhead Press.",
               notes:["Sit on an upright bench with back support so the spine can't arch. Press overhead, ribs down, controlled."] },
-            log:L(["Weight","Reps","RPE"],2) },
+            log:L(["Weight","Reps"],2) },
         ]},
         { label:"D", items:[
           { id:"D", name:"Front Plank", tempo:"hold", scheme:"30–45 s hold × 3 @ RPE 6–7", sets:3,
             rests:"30 s", timer:ivl(3,"Hold",45,"sustain","Rest",30,"rest"),
             notes:["Elbows under shoulders, squeeze glutes, flat line head to heels. Stop the set when your hips sag — quality over seconds."],
-            log:L(["Hold s","RPE"],3) },
+            log:L(["Hold s"],3) },
         ]},
       ] },
 
@@ -501,7 +506,7 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
           notes:["Pick anything steady — brisk incline walk, bike, or row are all easy on the knees; add an easy outdoor run only if the knee is happy.",
                  "Hold ~70–80% of max HR: you can speak in full sentences but wouldn't want to sing. If you're gasping, back off.",
                  "This is the aerobic base that makes everyday activity feel easier and supports a leaner body. Resist the urge to push it."],
-          timer:count(2400), log:L(["Modality","Distance","Avg HR","RPE"],1) },
+          timer:count(2400), log:L(["Modality","Distance","Avg HR"],1) },
       ] },
 
     /* ===== THU — REST ===== */
@@ -522,19 +527,19 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
             swap:{ name:"Barbell Hip Thrust", tempo:"2-0-1-1",
               sub:"Sore-day variant of the Romanian Deadlift.",
               notes:["Upper back on a bench, drive the hips up and squeeze the glutes hard at the top, lower under control.","Same glute/hamstring work with the spine fully supported. Padded barbell, or a dumbbell across the hips."] },
-            log:L(["Weight","Reps","RPE"],3) },
+            log:L(["Weight","Reps"],3) },
         ]},
         { label:"B", items:[
           { id:"B", name:"Lat Pulldown", tempo:"2-0-1-0", scheme:"8–12 reps @ RPE 6–7", sets:3,
             rests:"90 s", timer:rest(90),
             notes:["Pull the bar to your collarbone, lead with the elbows, control the way back up. No swinging."],
-            log:L(["Weight","Reps","RPE"],3) },
+            log:L(["Weight","Reps"],3) },
         ]},
         { label:"C", items:[
           { id:"C", name:"Seated Cable Row", tempo:"2-0-1-1", scheme:"10–12 reps @ RPE 6–7", sets:3,
             rests:"75 s", timer:rest(75),
             notes:["Tall chest, pull to the belly, squeeze the shoulder blades, slow release. Don't lean back to move the weight."],
-            log:L(["Weight","Reps","RPE"],3) },
+            log:L(["Weight","Reps"],3) },
         ]},
         { label:"D", items:[
           { id:"D", name:"Dumbbell Step-Up", tempo:"2-0-1-0", scheme:"8 reps / leg @ RPE 6–7", sets:2,
@@ -545,14 +550,14 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
             swap:{ name:"Glute Bridge", scheme:"10–12 reps @ RPE 6–7",
               sub:"Sore-day variant of the Step-Up.",
               notes:["On the floor, feet flat, drive the hips up and squeeze the glutes, lower under control. No knee loading, spine supported.","Add a dumbbell across the hips to progress. 10–12 reps = 1 set."],
-              log:L(["Weight","Reps","RPE"],2) },
-            log:L(["Weight","Reps/leg","RPE"],2) },
+              log:L(["Weight","Reps"],2) },
+            log:L(["Weight","Reps/leg"],2) },
         ]},
         { label:"E", items:[
           { id:"E", name:"Dead Bug", tempo:"controlled", scheme:"8 reps / side @ RPE 6–7", sets:3,
             rests:"45 s", timer:rest(45),
             notes:["On your back, low back pressed into the floor. Lower opposite arm and leg slowly, keep the ribs down. 8 each side = 1 set."],
-            log:L(["Reps/side","RPE"],3) },
+            log:L(["Reps/side"],3) },
         ]},
       ] },
 
@@ -569,20 +574,20 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
             swap:{ name:"Barbell Hip Thrust", tempo:"2-0-1-1", scheme:"8–10 reps @ RPE 6–7",
               sub:"Sore-day variant of the Trap Bar Deadlift.",
               notes:["Upper back on a bench, drive the hips up, squeeze the glutes hard at the top, lower under control.","All the hip power of the deadlift with the spine supported. Padded barbell or a dumbbell across the hips."] },
-            log:L(["Weight","Reps","RPE"],3) },
+            log:L(["Weight","Reps"],3) },
         ]},
         { label:"B", items:[
           { id:"B", name:"Incline Dumbbell Press", tempo:"2-0-1-0", scheme:"10–12 reps @ RPE 6–7", sets:3,
             rests:"90 s", timer:rest(90),
             notes:["Bench at ~30°. Press up and slightly together, lower under control to the upper chest."],
-            log:L(["Weight","Reps","RPE"],3) },
+            log:L(["Weight","Reps"],3) },
         ]},
         { label:"C", note:"Superset — alternate C1 & C2", items:[
           { id:"C1", name:"Farmer's Carry", tempo:"walk", scheme:"30–40 m @ RPE 6–7", sets:3,
             straight:"C2",
             notes:["A heavy dumbbell/kettlebell in each hand. Tall posture, braced core, steady steps. This is everyday carrying strength.",
                    "Back-friendly when done tall and braced — stand upright, don't lean; it actually trains the core that protects the spine."],
-            log:L(["Load/hand","Dist m","RPE"],3) },
+            log:L(["Load/hand","Dist m"],3) },
           { id:"C2", name:"Russian Kettlebell Swing", tempo:"explosive", scheme:"12–15 reps @ RPE 6–7", sets:3,
             rests:"90 s, then back to C1", timer:rest(90),
             sub:"Back-smart: the power comes from snapping the hips, never from the lower back. Keep a flat spine, brace, and finish by squeezing the glutes — don't lean back at the top. Start light and only add load once the movement is clean.",
@@ -591,13 +596,13 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
             swap:{ name:"Floor Glute Bridge", tempo:"1-1-1-1",
               sub:"Sore-day variant of the Kettlebell Swing.",
               notes:["Floor glute bridge — hips up, squeeze hard, control down. All the glute drive of the swing with zero spinal load.","Add a dumbbell across the hips to progress."] },
-            log:L(["Weight","Reps","RPE"],3) },
+            log:L(["Weight","Reps"],3) },
         ]},
         { label:"D", items:[
           { id:"D", name:"Side Plank", tempo:"hold", scheme:"20–30 s / side × 2 @ RPE 6–7", sets:2,
             rests:"switch sides", timer:ivl(4,"Hold",30,"sustain","Switch",15,"rest"),
             notes:["Elbow under shoulder, hips stacked and lifted, straight line. Timer runs 4 holds — alternate sides each one."],
-            log:L(["Hold s","RPE"],2) },
+            log:L(["Hold s"],2) },
         ]},
       ] },
 
@@ -614,7 +619,7 @@ const PROGRAM = { name:"Functional Fitness", weeks:[
           swap:{ name:"Low-Impact Intervals", effort:{icon:"💛", label:"Low-impact · intervals", tone:"sustain"},
             sub:"Sore-day variant — low-impact machines only.",
             notes:["Bike, rower or elliptical only — same hard/easy structure, no pounding on the knees or back.","Hard = ~85% effort you can hold for the minute; easy = genuine recovery.","Start at 6 rounds if 8 is too much."] },
-          timer:ivl(8,"Hard",60,"hot","Easy",120,"easy"), log:L(["Modality","Rounds","Avg HR","RPE"],1) },
+          timer:ivl(8,"Hard",60,"hot","Easy",120,"easy"), log:L(["Modality","Rounds","Avg HR"],1) },
       ] },
 
   ] },
@@ -666,7 +671,7 @@ function renderDayStrip(){ const wk=PROGRAM.weeks[wIdx];
 /* ============================ FOLD (warmup/cooldown) ============================ */
 function fold(block){ if(!block) return "";
   const body=block.secs.map(s=>`<div class="wk-sec">${s.h?`<div class="wk-sec__h">${esc(s.h)}</div>`:""}
-    <ul class="softlist">${s.items.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("");
+    <ul class="softlist">${s.items.map(x=>{ if(typeof x==="string") return `<li>${esc(x)}</li>`; const lk=x.vid?` <a class="demo__yt" style="margin-top:0" href="https://www.youtube.com/watch?v=${esc(x.vid)}" target="_blank" rel="noopener">▶ demo ↗</a>`:""; return `<li>${esc(x.t)}${lk}</li>`; }).join("")}</ul></div>`).join("");
   return `<details class="fold"><summary><span class="fold__k">${esc(block.title)}</span><span class="fold__chev">▼</span></summary>
     <div class="fold__body">${body}</div></details>`;
 }
