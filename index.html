@@ -205,6 +205,53 @@
   .switch[aria-checked="true"] .switch__dot{transform:translateX(20px)}
   .soremode.is-on .soremode__lbl{border-color:var(--hot); background:#FFF6EE}
 
+  /* weight tracker */
+  .wcard{background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:14px 15px; margin-bottom:18px}
+  .wcard__h{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px}
+  .wcard__t{font-family:var(--disp); font-weight:800; font-size:16px}
+  .wcard__g{font-size:11px; font-weight:800; color:var(--sustain-ink); letter-spacing:.02em}
+  .wform{display:flex; gap:8px; margin-bottom:12px}
+  .wform input{flex:1; min-width:0; text-align:center; font-family:var(--mono); font-weight:700; font-size:16px; padding:10px; border:1px solid var(--line-2); border-radius:10px; background:#FCFCFD; color:var(--ink)}
+  .wform input:focus{outline:none; border-color:var(--ink); background:#fff}
+  .wform button{flex:0 0 auto; padding:10px 18px; border-radius:10px; background:var(--brand); color:#fff; font-weight:800; font-size:13px}
+  .wform button:active{transform:scale(.98)}
+  .wstats{display:flex; gap:8px; margin-bottom:6px}
+  .wstat{flex:1; background:#F6F7F9; border-radius:10px; padding:9px 6px; text-align:center}
+  .wstat__v{font-family:var(--mono); font-weight:700; font-size:16px; color:var(--ink)}
+  .wstat__v.down{color:var(--sustain-ink)} .wstat__v.up{color:var(--max-ink)}
+  .wstat__l{font-size:9px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-2); margin-top:3px}
+  .wchart{width:100%; height:auto; display:block; margin:8px 0 2px}
+  .wempty{font-size:13px; color:var(--ink-2); text-align:center; padding:8px 4px 2px; line-height:1.5}
+  .wlist{margin-top:11px; display:flex; flex-wrap:wrap; gap:6px}
+  .witem{font-family:var(--mono); font-size:11px; color:var(--ink-2); background:#F6F7F9; border-radius:999px; padding:4px 5px 4px 10px; display:flex; align-items:center; gap:7px}
+  .witem button{color:var(--max); font-weight:800; font-size:12px; line-height:1; padding:0 2px}
+
+  /* primer set callout */
+  .ex__primer{font-size:12.5px; color:var(--brand); background:#EEEDFB; border-left:3px solid var(--brand); border-radius:0 8px 8px 0; padding:7px 10px; margin:9px 15px 0; line-height:1.45}
+  .ex__primer b{font-weight:800; letter-spacing:.01em}
+
+  /* rest-day walk callout */
+  .restwalk{display:flex; align-items:center; gap:10px; font-size:15px; font-weight:800; color:var(--sustain-ink);
+    background:#F1FBF4; border:1px solid #CDE9D6; border-radius:12px; padding:13px 14px; margin:0 0 14px; line-height:1.35}
+  .restwalk__ic{font-size:20px; line-height:1}
+
+  /* effort guide */
+  .guide{background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); margin-bottom:18px; overflow:hidden}
+  .guide>summary{list-style:none; cursor:pointer; padding:14px 15px; display:flex; align-items:center; gap:10px}
+  .guide>summary::-webkit-details-marker{display:none}
+  .guide__t{font-family:var(--disp); font-weight:800; font-size:15px}
+  .guide__x{margin-left:auto; font-size:11px; color:var(--ink-2); transition:transform .18s}
+  .guide[open] .guide__x{transform:rotate(180deg)}
+  .guide__b{padding:0 15px 15px}
+  .guide__h{font-family:var(--disp); font-weight:800; font-size:12.5px; letter-spacing:.02em; color:var(--brand); margin:14px 0 5px}
+  .guide__p{font-size:12.5px; color:var(--ink-2); margin:0 0 8px; line-height:1.5}
+  .guide__note{background:#F1FBF4; color:var(--sustain-ink); border-radius:8px; padding:8px 10px; margin-top:6px}
+  table.gtab{width:100%; border-collapse:collapse; margin-bottom:2px}
+  table.gtab th{font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-2); font-weight:800; text-align:left; padding:4px 6px; border-bottom:1px solid var(--line)}
+  table.gtab td{font-size:12.5px; padding:6px; border-bottom:1px solid var(--line); color:var(--ink)}
+  table.gtab td:first-child{font-weight:700}
+  table.gtab tr.hi td{background:#FFF6EE; color:var(--hot-ink); font-weight:700}
+
   /* timer overlay */
   .timer{position:fixed; inset:0; z-index:60; display:none; flex-direction:column; color:#fff;
     padding:calc(24px + env(safe-area-inset-top)) 22px calc(30px + env(safe-area-inset-bottom)); text-align:center}
@@ -445,203 +492,249 @@ const count = s => ({type:"count", sec:s});
 /* ============================ PROGRAM ============================
    Add weeks by copying a { week:n, meta, days:[...] } block below.
    Day types: "strength" (groups[]), "conditioning" (blocks[]), "rest". */
-const PROGRAM = { name:"Functional Fitness", weeks:[
-{
-  week:1, meta:"Functional · 5 days · RPE 6–7",
-  days:[
+/* ============================ BASE WEEK (content) ============================
+   One canonical week. The 6-week block below is generated from this by
+   ffApply(), which rewrites the RPE target and interval volume per week.
+   Exercise NAMES stay identical across weeks so week-on-week logs line up. */
+const BASE_DAYS = [
 
-    /* ===== MON — REST ===== */
-    { day:"Monday", type:"rest",
-      title:"Rest & Recover",
-      note:"Full rest day. Strength is built while you recover, not while you train — so take it. A relaxed walk, easy mobility or stretching is welcome; keep anything you do genuinely easy and save the effort for tomorrow." },
+  /* ===== MON — STRENGTH A (Squat + Push) ===== */
+  { day:"Monday", type:"strength", title:"Strength A · Squat + Push", priority:true,
+    warmup:STRENGTH_WARMUP, cooldown:STRENGTH_COOLDOWN,
+    groups:[
+      { label:"A", items:[
+        { id:"A", name:"Goblet Squat", primer:"1 × 5–8 bodyweight squats to groove depth and form before you load up", tempo:"3-0-1-0", scheme:"8–10 reps @ RPE 6–7", sets:3,
+          rests:"90 s", timer:rest(90),
+          sub:"Knee-friendly: squat only as deep as stays pain-free, or sit to a box/bench. Keep the load light and build up — never train into sharp knee pain.",
+          notes:["Hold one dumbbell/kettlebell at your chest. Sit down between your hips, heels flat, knees tracking over toes.",
+                 "A dull working burn is fine; sharp or pinpoint knee pain is the signal to reduce depth or load."],
+          swap:{ name:"Box Squat (sit to bench)",
+            sub:"Sore-day variant of the Goblet Squat.",
+            notes:["Sit back to a bench or box set at a pain-free height, pause, then stand. Same pattern, controlled depth, far kinder to the knee.",
+                   "Light goblet load or just bodyweight."] },
+          log:L(["Weight","Reps"],3) },
+      ]},
+      { label:"B", items:[
+        { id:"B", name:"Push-Up", primer:"1 × 3–5 easy reps (hands raised) to feel the movement and set your brace", tempo:"2-0-1-0", scheme:"8–12 reps @ RPE 6–7", sets:3,
+          rests:"90 s", timer:rest(90),
+          notes:["Hands under shoulders, body in a straight line, lower with control until the chest is just above the floor, then press back up. Brace the core so the hips don't sag.",
+                 "Too hard for full reps? Raise your hands onto a bench (incline) and lower the surface over time. Too easy? Slow the lowering or elevate your feet."],
+          swap:{ name:"Incline Push-Up",
+            sub:"Easier / sore-day variant of the Push-Up.",
+            notes:["Hands on a bench, bar or box — the higher the hands, the easier. Lower the surface toward the floor as you get stronger.",
+                   "Keep the body in one straight line, full range, controlled tempo."] },
+          log:L(["Reps","Level"],3) },
+      ]},
+      { label:"C", items:[
+        { id:"C", name:"Dumbbell Walking Lunge", primer:"1 × 4–5 bodyweight lunges / leg to find balance and range", tempo:"2-0-1-0", scheme:"10 reps / leg @ RPE 6–7", sets:2,
+          rests:"75 s", timer:rest(75),
+          sub:"Knee-friendly: if lunging bothers the knee, swap to Reverse Lunges (step backward — much gentler on the kneecap) or a Dumbbell Glute Bridge.",
+          notes:["A dumbbell in each hand. Long step, back knee toward the floor, drive through the front heel. 10 each leg = 1 set.",
+                 "Keep the front shin fairly vertical and weight in the heel to spare the knee."],
+          swap:{ name:"Reverse Lunge",
+            sub:"Sore-day variant of the Walking Lunge.",
+            notes:["Step backward into the lunge instead of forward — much gentler on the kneecap and easier to control. 10 each leg = 1 set.",
+                   "Light dumbbells or bodyweight. Weight in the front heel, torso tall."] },
+          log:L(["Weight","Reps/leg"],2) },
+      ]},
+      { label:"D", items:[
+        { id:"D", name:"Dumbbell Overhead Press", primer:"1 × 5–8 empty-hand or very light presses to prime the shoulders", tempo:"2-0-1-0", scheme:"8–12 reps @ RPE 6–7", sets:2,
+          rests:"90 s", timer:rest(90),
+          sub:"Back-smart: pressing overhead tempts the low back to arch. Squeeze the glutes, keep ribs down and brace. If the back still arches, press seated with back support.",
+          notes:["Standing or seated. Ribs down, press overhead without arching the low back."],
+          swap:{ name:"Seated Dumbbell Overhead Press",
+            sub:"Sore-day variant of the Overhead Press.",
+            notes:["Sit on an upright bench with back support so the spine can't arch. Press overhead, ribs down, controlled."] },
+          log:L(["Weight","Reps"],2) },
+      ]},
+      { label:"E", items:[
+        { id:"E", name:"Front Plank", tempo:"hold", scheme:"30–45 s hold × 3 @ RPE 6–7", sets:3,
+          rests:"30 s", timer:ivl(3,"Hold",45,"sustain","Rest",30,"rest"),
+          notes:["Elbows under shoulders, squeeze glutes, flat line head to heels. Stop the set when your hips sag — quality over seconds."],
+          log:L(["Hold s"],3) },
+      ]},
+    ] },
 
-    /* ===== TUE — STRENGTH A (Squat + Push) ===== */
-    { day:"Tuesday", type:"strength", title:"Strength A · Squat + Push", priority:true,
-      warmup:STRENGTH_WARMUP, cooldown:STRENGTH_COOLDOWN,
-      groups:[
-        { label:"A", items:[
-          { id:"A", name:"Goblet Squat", tempo:"3-0-1-0", scheme:"8–10 reps @ RPE 6–7", sets:3,
-            rests:"90 s", timer:rest(90),
-            sub:"Knee-friendly: squat only as deep as stays pain-free, or sit to a box/bench. Keep the load light and build up — never train into sharp knee pain.",
-            notes:["Hold one dumbbell/kettlebell at your chest. Sit down between your hips, heels flat, knees tracking over toes.",
-                   "A dull working burn is fine; sharp or pinpoint knee pain is the signal to reduce depth or load."],
-            swap:{ name:"Box Squat (sit to bench)",
-              sub:"Sore-day variant of the Goblet Squat.",
-              notes:["Sit back to a bench or box set at a pain-free height, pause, then stand. Same pattern, controlled depth, far kinder to the knee.",
-                     "Light goblet load or just bodyweight."] },
-            log:L(["Weight","Reps"],3) },
-        ]},
-        { label:"B", items:[
-          { id:"B", name:"Dumbbell Bench Press", tempo:"2-0-1-0", scheme:"8–12 reps @ RPE 6–7", sets:3,
-            rests:"90 s", timer:rest(90),
-            notes:["Flat bench. Lower under control to chest level, press without locking hard. Dumbbells let each arm work evenly."],
-            log:L(["Weight","Reps"],3) },
-        ]},
-        { label:"C", items:[
-          { id:"C", name:"Dumbbell Walking Lunge", tempo:"2-0-1-0", scheme:"10 reps / leg @ RPE 6–7", sets:2,
-            rests:"75 s", timer:rest(75),
-            sub:"Knee-friendly: if lunging bothers the knee, swap to Reverse Lunges (step backward — much gentler on the kneecap) or a Dumbbell Glute Bridge.",
-            notes:["A dumbbell in each hand. Long step, back knee toward the floor, drive through the front heel. 10 each leg = 1 set.",
-                   "Keep the front shin fairly vertical and weight in the heel to spare the knee."],
-            swap:{ name:"Reverse Lunge",
-              sub:"Sore-day variant of the Walking Lunge.",
-              notes:["Step backward into the lunge instead of forward — much gentler on the kneecap and easier to control. 10 each leg = 1 set.",
-                     "Light dumbbells or bodyweight. Weight in the front heel, torso tall."] },
-            log:L(["Weight","Reps/leg"],2) },
-        ]},
-        { label:"D", items:[
-          { id:"D", name:"Dumbbell Overhead Press", tempo:"2-0-1-0", scheme:"8–12 reps @ RPE 6–7", sets:2,
-            rests:"90 s", timer:rest(90),
-            sub:"Back-smart: pressing overhead tempts the low back to arch. Squeeze the glutes, keep ribs down and brace. If the back still arches, press seated with back support.",
-            notes:["Standing or seated. Ribs down, press overhead without arching the low back."],
-            swap:{ name:"Seated Dumbbell Overhead Press",
-              sub:"Sore-day variant of the Overhead Press.",
-              notes:["Sit on an upright bench with back support so the spine can't arch. Press overhead, ribs down, controlled."] },
+  /* ===== TUE — INTERVAL CONDITIONING ===== */
+  { day:"Tuesday", type:"conditioning", title:"Interval Conditioning",
+    warmup:COND_WARMUP_B, cooldown:COND_COOLDOWN,
+    blocks:[
+      { id:"A", name:"Hard / Easy Intervals", scheme:"1 min hard · 2 min easy × 8 (24 min)",
+        effort:{icon:"🧡", label:"Hard · intervals", tone:"hot"}, novideo:true,
+        sub:"Knee-friendly: choose a low-impact mode — bike, rower or elliptical — for the hard efforts. These load the knee far less than running while still raising the heart rate.",
+        notes:["Bike, row, elliptical or (if knees are happy) run — whatever you can push safely.",
+               "Hard = ~85–90% effort, breathing hard but controlled. Easy = a genuine recovery, almost a stroll.",
+               "Tired or sore week? Swap this for a 30–40 min easy Zone 2 session (steady, conversational pace) instead — it still burns and spares the joints.",
+               "Your one weekly dose of higher intensity: it lifts VO₂ max and burns well without beating you up. Start with fewer rounds if the full set is too much."],
+        swap:{ name:"Low-Impact Intervals", effort:{icon:"💛", label:"Low-impact · intervals", tone:"sustain"},
+          sub:"Sore-day variant — low-impact machines only.",
+          notes:["Bike, rower or elliptical only — same hard/easy structure, no pounding on the knees or back.","Hard = ~85% effort you can hold for the minute; easy = genuine recovery.","Start with fewer rounds if the full set is too much."] },
+        timer:ivl(8,"Hard",60,"hot","Easy",120,"easy"), log:L(["Modality","Rounds","Avg HR"],1) },
+    ] },
+
+  /* ===== WED — REST ===== */
+  { day:"Wednesday", type:"rest",
+    title:"Rest & Recover",
+    walk:"Go out for a 30-minute easy walk today.",
+    note:"Full rest from training. Recovery is when it pays off — in a calorie deficit, sleep and enough protein are what protect your muscle while you lose fat. Keep today genuinely easy; the walk is on top of your normal steps and won't touch your strength recovery." },
+
+  /* ===== THU — STRENGTH B (Hinge + Pull) ===== */
+  { day:"Thursday", type:"strength", title:"Strength B · Hinge + Pull", priority:true,
+    warmup:STRENGTH_WARMUP, cooldown:STRENGTH_COOLDOWN,
+    groups:[
+      { label:"A", items:[
+        { id:"A", name:"Romanian Deadlift", primer:"1 × 5 bodyweight hip hinges (hands sliding down the thighs) to rehearse a flat-back hinge", tempo:"3-1-1-0", scheme:"8–10 reps @ RPE 6–7", sets:3,
+          rests:"90 s", timer:rest(90),
+          sub:"Back-smart: brace your core before each rep and only hinge as far as you can keep a flat, neutral spine — stop the moment the low back wants to round. Dumbbells or a barbell both work; keep the load light if the back is sensitive.",
+          notes:["Soft knees, push the hips back and feel the hamstrings load. Bar/dumbbells stay close to the legs. Stand tall, don't round.",
+                 "If the low back is flaring today, reduce range and load, or swap to a Hip Thrust / Glute Bridge — same hip work, spine supported."],
+          swap:{ name:"Barbell Hip Thrust", tempo:"2-0-1-1",
+            sub:"Sore-day variant of the Romanian Deadlift.",
+            notes:["Upper back on a bench, drive the hips up and squeeze the glutes hard at the top, lower under control.","Same glute/hamstring work with the spine fully supported. Padded barbell, or a dumbbell across the hips."] },
+          log:L(["Weight","Reps"],3) },
+      ]},
+      { label:"B", items:[
+        { id:"B", name:"Lat Pulldown", primer:"1 × 8–10 very light reps to feel the lats switch on", tempo:"2-0-1-0", scheme:"8–12 reps @ RPE 6–7", sets:3,
+          rests:"90 s", timer:rest(90),
+          notes:["Pull the bar to your collarbone, lead with the elbows, control the way back up. No swinging."],
+          log:L(["Weight","Reps"],3) },
+      ]},
+      { label:"C", items:[
+        { id:"C", name:"Seated Cable Row", primer:"1 × 8–10 very light reps to set your posture", tempo:"2-0-1-1", scheme:"10–12 reps @ RPE 6–7", sets:3,
+          rests:"75 s", timer:rest(75),
+          notes:["Tall chest, pull to the belly, squeeze the shoulder blades, slow release. Don't lean back to move the weight."],
+          log:L(["Weight","Reps"],3) },
+      ]},
+      { label:"D", items:[
+        { id:"D", name:"Dumbbell Step-Up", primer:"1 × 3–5 bodyweight step-ups / leg to check box height and balance", tempo:"2-0-1-0", scheme:"8 reps / leg @ RPE 6–7", sets:2,
+          rests:"75 s", timer:rest(75),
+          sub:"Knee-friendly: start with a LOW box (mid-shin) and raise it over weeks only if pain-free. Sore knees? Swap to a Hip Thrust or Glute Bridge instead.",
+          notes:["Drive through the top foot, control the way down — don't push off the bottom foot. 8 each leg = 1 set.",
+                 "Lower box = less knee bend = less stress. Progress height gradually."],
+          swap:{ name:"Glute Bridge", scheme:"10–12 reps @ RPE 6–7",
+            sub:"Sore-day variant of the Step-Up.",
+            notes:["On the floor, feet flat, drive the hips up and squeeze the glutes, lower under control. No knee loading, spine supported.","Add a dumbbell across the hips to progress. 10–12 reps = 1 set."],
             log:L(["Weight","Reps"],2) },
-        ]},
-        { label:"E", items:[
-          { id:"E", name:"Front Plank", tempo:"hold", scheme:"30–45 s hold × 3 @ RPE 6–7", sets:3,
-            rests:"30 s", timer:ivl(3,"Hold",45,"sustain","Rest",30,"rest"),
-            notes:["Elbows under shoulders, squeeze glutes, flat line head to heels. Stop the set when your hips sag — quality over seconds."],
-            log:L(["Hold s"],3) },
-        ]},
-      ] },
+          log:L(["Weight","Reps/leg"],2) },
+      ]},
+      { label:"E", items:[
+        { id:"E", name:"Dead Bug", tempo:"controlled", scheme:"8 reps / side @ RPE 6–7", sets:3,
+          rests:"45 s", timer:rest(45),
+          notes:["On your back, low back pressed into the floor. Lower opposite arm and leg slowly, keep the ribs down. 8 each side = 1 set."],
+          log:L(["Reps/side"],3) },
+      ]},
+    ] },
 
-    /* ===== WED — ZONE 2 CONDITIONING ===== */
-    { day:"Wednesday", type:"conditioning", title:"Zone 2 Cardio",
-      warmup:COND_WARMUP_A, cooldown:COND_COOLDOWN,
-      blocks:[
-        { id:"A", name:"Zone 2 Steady Cardio", scheme:"30–45 min continuous · easy",
-          effort:{icon:"💙", label:"Easy · Zone 2", tone:"easy"}, novideo:true,
-          notes:["Pick anything steady — brisk incline walk, bike, or row are all easy on the knees; add an easy outdoor run only if the knee is happy.",
-                 "Hold ~70–80% of max HR: you can speak in full sentences but wouldn't want to sing. If you're gasping, back off.",
-                 "This is the aerobic base that makes everyday activity feel easier and supports a leaner body. Resist the urge to push it."],
-          timer:count(2400), log:L(["Modality","Distance","Avg HR"],1) },
-      ] },
+  /* ===== FRI — REST ===== */
+  { day:"Friday", type:"rest",
+    title:"Rest & Recover",
+    walk:"Go out for a 30-minute easy walk today.",
+    note:"Full rest before the weekend session. Gentle movement only, kept truly easy. Prioritise sleep and protein so Saturday's lifts land strong — the walk is the quiet fat-loss lever on a rest day." },
 
-    /* ===== THU — REST ===== */
-    { day:"Thursday", type:"rest",
-      title:"Rest & Recover",
-      note:"Full rest between your two strength blocks. Gentle movement only — a walk or light mobility — kept truly easy so Friday and the weekend land fresh. Prioritise sleep and protein today." },
+  /* ===== SAT — STRENGTH C (Full-body + Carries) ===== */
+  { day:"Saturday", type:"strength", title:"Strength C · Full-body + Carries", priority:true,
+    warmup:STRENGTH_WARMUP_2, cooldown:STRENGTH_COOLDOWN_2,
+    groups:[
+      { label:"A", items:[
+        { id:"A", name:"Trap Bar Deadlift", primer:"1–2 × 5 light reps (empty/na light load) to groove the lift before working weight", tempo:"2-1-1-0", scheme:"6–8 reps @ RPE 6–7", sets:3,
+          rests:"2 min", timer:rest(120),
+          sub:"Back-smart: the trap bar keeps you more upright than a straight bar, so it's the kinder choice for the lower back — brace hard, keep a flat spine, and raise the handles on blocks/plates to shorten the range if bending down aggravates it. No trap bar? Dumbbells at your sides work the same way.",
+          notes:["The big functional lift of the week. Flat back, push the floor away, stand tall, control the descent. Add a little load each week.",
+                 "Low back sore? Drop the load, lift from an elevated start, or swap to a Hip Thrust for the day."],
+          swap:{ name:"Barbell Hip Thrust", tempo:"2-0-1-1", scheme:"8–10 reps @ RPE 6–7",
+            sub:"Sore-day variant of the Trap Bar Deadlift.",
+            notes:["Upper back on a bench, drive the hips up, squeeze the glutes hard at the top, lower under control.","All the hip power of the deadlift with the spine supported. Padded barbell or a dumbbell across the hips."] },
+          log:L(["Weight","Reps"],3) },
+      ]},
+      { label:"B", items:[
+        { id:"B", name:"Machine Chest Press", primer:"1 × 8–10 very light reps to set the seat and groove the press", tempo:"2-0-1-0", scheme:"10–12 reps @ RPE 6–7", sets:3,
+          rests:"90 s", timer:rest(90),
+          notes:["Set the seat so the handles sit at mid-chest. Press smoothly to just short of lockout, control the return.",
+                 "Back stays supported against the pad — easy on the lower back, and simple to load and unload on your own."],
+          log:L(["Weight","Reps"],3) },
+      ]},
+      { label:"C", items:[
+        { id:"C", name:"Farmer's Carry", tempo:"walk", scheme:"30–40 m @ RPE 6–7", sets:3,
+          rests:"75 s", timer:rest(75),
+          notes:["A heavy dumbbell/kettlebell in each hand. Tall posture, braced core, steady steps. This is everyday carrying strength.",
+                 "Back-friendly when done tall and braced — stand upright, don't lean; it actually trains the core that protects the spine."],
+          log:L(["Load/hand","Dist m"],3) },
+      ]},
+      { label:"D", items:[
+        { id:"D", name:"Russian Kettlebell Swing", primer:"1 × 5–8 hip hinges / light swings to rehearse the hip snap", tempo:"explosive", scheme:"12–15 reps @ RPE 6–7", sets:3,
+          rests:"90 s", timer:rest(90),
+          sub:"Back-smart: the power comes from snapping the hips, never from the lower back. Keep a flat spine, brace, and finish by squeezing the glutes — don't lean back at the top. Start light and only add load once the movement is clean.",
+          notes:["Hinge and snap the hips to float the bell to chest height — it's a hip drive, not a shoulder raise. Swing to eye level, no higher.",
+                 "If swings aggravate the back, swap to a Hip Thrust or Glute Bridge for the day."],
+          swap:{ name:"Floor Glute Bridge", tempo:"1-1-1-1",
+            sub:"Sore-day variant of the Kettlebell Swing.",
+            notes:["Floor glute bridge — hips up, squeeze hard, control down. All the glute drive of the swing with zero spinal load.","Add a dumbbell across the hips to progress."] },
+          log:L(["Weight","Reps"],3) },
+      ]},
+      { label:"E", items:[
+        { id:"E", name:"Side Plank", tempo:"hold", scheme:"20–30 s / side × 2 @ RPE 6–7", sets:2,
+          rests:"switch sides", timer:ivl(4,"Hold",30,"sustain","Switch",15,"rest"),
+          notes:["Elbow under shoulder, hips stacked and lifted, straight line. Timer runs 4 holds — alternate sides each one."],
+          log:L(["Hold s"],2) },
+      ]},
+    ] },
 
-    /* ===== FRI — STRENGTH B (Hinge + Pull) ===== */
-    { day:"Friday", type:"strength", title:"Strength B · Hinge + Pull", priority:true,
-      warmup:STRENGTH_WARMUP, cooldown:STRENGTH_COOLDOWN,
-      groups:[
-        { label:"A", items:[
-          { id:"A", name:"Romanian Deadlift", tempo:"3-1-1-0", scheme:"8–10 reps @ RPE 6–7", sets:3,
-            rests:"90 s", timer:rest(90),
-            sub:"Back-smart: brace your core before each rep and only hinge as far as you can keep a flat, neutral spine — stop the moment the low back wants to round. Dumbbells or a barbell both work; keep the load light if the back is sensitive.",
-            notes:["Soft knees, push the hips back and feel the hamstrings load. Bar/dumbbells stay close to the legs. Stand tall, don't round.",
-                   "If the low back is flaring today, reduce range and load, or swap to a Hip Thrust / Glute Bridge — same hip work, spine supported."],
-            swap:{ name:"Barbell Hip Thrust", tempo:"2-0-1-1",
-              sub:"Sore-day variant of the Romanian Deadlift.",
-              notes:["Upper back on a bench, drive the hips up and squeeze the glutes hard at the top, lower under control.","Same glute/hamstring work with the spine fully supported. Padded barbell, or a dumbbell across the hips."] },
-            log:L(["Weight","Reps"],3) },
-        ]},
-        { label:"B", items:[
-          { id:"B", name:"Lat Pulldown", tempo:"2-0-1-0", scheme:"8–12 reps @ RPE 6–7", sets:3,
-            rests:"90 s", timer:rest(90),
-            notes:["Pull the bar to your collarbone, lead with the elbows, control the way back up. No swinging."],
-            log:L(["Weight","Reps"],3) },
-        ]},
-        { label:"C", items:[
-          { id:"C", name:"Seated Cable Row", tempo:"2-0-1-1", scheme:"10–12 reps @ RPE 6–7", sets:3,
-            rests:"75 s", timer:rest(75),
-            notes:["Tall chest, pull to the belly, squeeze the shoulder blades, slow release. Don't lean back to move the weight."],
-            log:L(["Weight","Reps"],3) },
-        ]},
-        { label:"D", items:[
-          { id:"D", name:"Dumbbell Step-Up", tempo:"2-0-1-0", scheme:"8 reps / leg @ RPE 6–7", sets:2,
-            rests:"75 s", timer:rest(75),
-            sub:"Knee-friendly: start with a LOW box (mid-shin) and raise it over weeks only if pain-free. Sore knees? Swap to a Hip Thrust or Glute Bridge instead.",
-            notes:["Drive through the top foot, control the way down — don't push off the bottom foot. 8 each leg = 1 set.",
-                   "Lower box = less knee bend = less stress. Progress height gradually."],
-            swap:{ name:"Glute Bridge", scheme:"10–12 reps @ RPE 6–7",
-              sub:"Sore-day variant of the Step-Up.",
-              notes:["On the floor, feet flat, drive the hips up and squeeze the glutes, lower under control. No knee loading, spine supported.","Add a dumbbell across the hips to progress. 10–12 reps = 1 set."],
-              log:L(["Weight","Reps"],2) },
-            log:L(["Weight","Reps/leg"],2) },
-        ]},
-        { label:"E", items:[
-          { id:"E", name:"Dead Bug", tempo:"controlled", scheme:"8 reps / side @ RPE 6–7", sets:3,
-            rests:"45 s", timer:rest(45),
-            notes:["On your back, low back pressed into the floor. Lower opposite arm and leg slowly, keep the ribs down. 8 each side = 1 set."],
-            log:L(["Reps/side"],3) },
-        ]},
-      ] },
+  /* ===== SUN — REST ===== */
+  { day:"Sunday", type:"rest",
+    title:"Rest & Recover",
+    walk:"Go out for a 30-minute easy walk today.",
+    note:"Full rest to close the week. Let everything recover — some easy stretching is perfect, no hard training. A good protein day sets up next week's sessions." },
 
-    /* ===== SAT — STRENGTH C (Full-body + Carries) ===== */
-    { day:"Saturday", type:"strength", title:"Strength C · Full-body + Carries", priority:true,
-      warmup:STRENGTH_WARMUP_2, cooldown:STRENGTH_COOLDOWN_2,
-      groups:[
-        { label:"A", items:[
-          { id:"A", name:"Trap Bar Deadlift", tempo:"2-1-1-0", scheme:"6–8 reps @ RPE 6–7", sets:3,
-            rests:"2 min", timer:rest(120),
-            sub:"Back-smart: the trap bar keeps you more upright than a straight bar, so it's the kinder choice for the lower back — brace hard, keep a flat spine, and raise the handles on blocks/plates to shorten the range if bending down aggravates it. No trap bar? Dumbbells at your sides work the same way.",
-            notes:["The big functional lift of the week. Flat back, push the floor away, stand tall, control the descent. Add a little load each week.",
-                   "Low back sore? Drop the load, lift from an elevated start, or swap to a Hip Thrust for the day."],
-            swap:{ name:"Barbell Hip Thrust", tempo:"2-0-1-1", scheme:"8–10 reps @ RPE 6–7",
-              sub:"Sore-day variant of the Trap Bar Deadlift.",
-              notes:["Upper back on a bench, drive the hips up, squeeze the glutes hard at the top, lower under control.","All the hip power of the deadlift with the spine supported. Padded barbell or a dumbbell across the hips."] },
-            log:L(["Weight","Reps"],3) },
-        ]},
-        { label:"B", items:[
-          { id:"B", name:"Machine Chest Press", tempo:"2-0-1-0", scheme:"10–12 reps @ RPE 6–7", sets:3,
-            rests:"90 s", timer:rest(90),
-            notes:["Set the seat so the handles sit at mid-chest. Press smoothly to just short of lockout, control the return.",
-                   "Back stays supported against the pad — easy on the lower back, and simple to load and unload on your own."],
-            log:L(["Weight","Reps"],3) },
-        ]},
-        { label:"C", items:[
-          { id:"C", name:"Farmer's Carry", tempo:"walk", scheme:"30–40 m @ RPE 6–7", sets:3,
-            rests:"75 s", timer:rest(75),
-            notes:["A heavy dumbbell/kettlebell in each hand. Tall posture, braced core, steady steps. This is everyday carrying strength.",
-                   "Back-friendly when done tall and braced — stand upright, don't lean; it actually trains the core that protects the spine."],
-            log:L(["Load/hand","Dist m"],3) },
-        ]},
-        { label:"D", items:[
-          { id:"D", name:"Russian Kettlebell Swing", tempo:"explosive", scheme:"12–15 reps @ RPE 6–7", sets:3,
-            rests:"90 s", timer:rest(90),
-            sub:"Back-smart: the power comes from snapping the hips, never from the lower back. Keep a flat spine, brace, and finish by squeezing the glutes — don't lean back at the top. Start light and only add load once the movement is clean.",
-            notes:["Hinge and snap the hips to float the bell to chest height — it's a hip drive, not a shoulder raise. Swing to eye level, no higher.",
-                   "If swings aggravate the back, swap to a Hip Thrust or Glute Bridge for the day."],
-            swap:{ name:"Floor Glute Bridge", tempo:"1-1-1-1",
-              sub:"Sore-day variant of the Kettlebell Swing.",
-              notes:["Floor glute bridge — hips up, squeeze hard, control down. All the glute drive of the swing with zero spinal load.","Add a dumbbell across the hips to progress."] },
-            log:L(["Weight","Reps"],3) },
-        ]},
-        { label:"E", items:[
-          { id:"E", name:"Side Plank", tempo:"hold", scheme:"20–30 s / side × 2 @ RPE 6–7", sets:2,
-            rests:"switch sides", timer:ivl(4,"Hold",30,"sustain","Switch",15,"rest"),
-            notes:["Elbow under shoulder, hips stacked and lifted, straight line. Timer runs 4 holds — alternate sides each one."],
-            log:L(["Hold s"],2) },
-        ]},
-      ] },
+];
 
-    /* ===== SUN — INTERVAL CONDITIONING ===== */
-    { day:"Sunday", type:"conditioning", title:"Interval Conditioning",
-      warmup:COND_WARMUP_B, cooldown:COND_COOLDOWN,
-      blocks:[
-        { id:"A", name:"Hard / Easy Intervals", scheme:"1 min hard · 2 min easy × 8 (24 min)",
-          effort:{icon:"🧡", label:"Hard · intervals", tone:"hot"}, novideo:true,
-          sub:"Knee-friendly: choose a low-impact mode — bike, rower or elliptical — for the hard efforts. These load the knee far less than running while still raising the heart rate.",
-          notes:["Bike, row, elliptical or (if knees are happy) run — whatever you can push safely.",
-                 "Hard = ~85–90% effort, breathing hard but controlled. Easy = a genuine recovery, almost a stroll.",
-                 "The one weekly dose of higher intensity: it lifts your VO₂ max and burns well without beating you up. Start at 6 rounds if 8 is too much."],
-          swap:{ name:"Low-Impact Intervals", effort:{icon:"💛", label:"Low-impact · intervals", tone:"sustain"},
-            sub:"Sore-day variant — low-impact machines only.",
-            notes:["Bike, rower or elliptical only — same hard/easy structure, no pounding on the knees or back.","Hard = ~85% effort you can hold for the minute; easy = genuine recovery.","Start at 6 rounds if 8 is too much."] },
-          timer:ivl(8,"Hard",60,"hot","Easy",120,"easy"), log:L(["Modality","Rounds","Avg HR"],1) },
-      ] },
+/* ============================ 6-WEEK PROGRESSION ============================
+   Same movements every week; the load target (RPE) climbs, intervals build,
+   then week 6 deloads so she finishes fresh and can reassess / start block 2. */
+const WEEKS_PLAN = [
+  { week:1, meta:"Learn the loads · RPE 6–7", rpe:"6–7", rounds:8 },
+  { week:2, meta:"Build · RPE 7",             rpe:"7",   rounds:8 },
+  { week:3, meta:"Add load · RPE 7–8",        rpe:"7–8", rounds:9 },
+  { week:4, meta:"Push · +1 set on main lifts · RPE 8", rpe:"8", rounds:10, bumpAB:true },
+  { week:5, meta:"Peak · +1 set on main lifts · RPE 8", rpe:"8", rounds:10, bumpAB:true },
+  { week:6, meta:"Deload & reassess · RPE 6", rpe:"6",   rounds:6 },
+];
 
-  ] },
-]};
+function ffClone(x){ return JSON.parse(JSON.stringify(x)); }
+function ffApply(days, p){
+  days.forEach(function(d){
+    var items = d.type==="strength" ? d.groups.reduce(function(a,g){ return a.concat(g.items); },[])
+              : d.type==="conditioning" ? d.blocks : [];
+    items.forEach(function(it){
+      if(it.scheme) it.scheme = it.scheme.replace(/RPE [\d–-]+/, "RPE "+p.rpe);
+      if(it.swap && it.swap.scheme) it.swap.scheme = it.swap.scheme.replace(/RPE [\d–-]+/, "RPE "+p.rpe);
+      if(d.type==="conditioning" && it.timer && it.timer.type==="interval"){
+        it.timer.sets = p.rounds;
+        it.scheme = "1 min hard · 2 min easy × "+p.rounds+" ("+(p.rounds*3)+" min)";
+      }
+    });
+    if(p.bumpAB && d.type==="strength"){
+      d.groups.forEach(function(g){ if(g.label==="A"||g.label==="B"){
+        g.items.forEach(function(it){ if(typeof it.sets==="number"){ it.sets+=1; } });
+      }});
+    }
+    // log rows = working sets (+1 for the warm-up "W" set on exercises with a primer)
+    if(d.type==="strength"){
+      d.groups.forEach(function(g){ g.items.forEach(function(it){
+        if(it.log && typeof it.sets==="number") it.log.rows = it.sets + (it.primer?1:0);
+      });});
+    }
+  });
+  return days;
+}
+
+const PROGRAM = { name:"Functional Fitness", weeks: WEEKS_PLAN.map(function(p){
+  return { week:p.week, meta:p.meta, days: ffApply(ffClone(BASE_DAYS), p) };
+}) };
 
 /* ============================ STATE ============================ */
 const KEY="ff.v1";
 let store = (()=>{ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } })();
-if(!store.logs) store.logs={}; if(!store.done) store.done={}; if(store.sore===undefined) store.sore=false;
+if(!store.logs) store.logs={}; if(!store.done) store.done={}; if(store.sore===undefined) store.sore=false; if(!store.wlog) store.wlog=[];
 let saveT=null;
 function persist(){ clearTimeout(saveT); saveT=setTimeout(()=>{ try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e){} }, 150); }
 
@@ -707,7 +800,7 @@ function logHTML(day, it){
   const lastSets = lastWk ? (series[lastWk]||[]) : [];
   const prevHead = lastWk ? `<th class="prev">W${lastWk}</th>` : "";
   let cw=`<table class="sets"><thead><tr><th class="s">Set</th>${cols.map(c=>`<th>${esc(c)}</th>`).join("")}${prevHead}</tr></thead><tbody>`;
-  for(let i=0;i<rows;i++){ cw+=`<tr><td class="s">${rows>1?i+1:"—"}</td>${cols.map((c,ci)=>{
+  for(let i=0;i<rows;i++){ cw+=`<tr><td class="s">${it.primer?(i===0?"W":i):(rows>1?i+1:"—")}</td>${cols.map((c,ci)=>{
     const v=(cur[i]&&cur[i][ci]!=null)?esc(cur[i][ci]):"";
     return `<td><input inputmode="text" data-sk="${esc(sk)}" data-wk="${wk}" data-r="${i}" data-c="${ci}" value="${v}"></td>`;
   }).join("")}${lastWk?`<td class="prev">${esc(fmtSet(lastSets[i]||[]))}</td>`:""}</tr>`; }
@@ -718,7 +811,7 @@ function logHTML(day, it){
     const allWeeks=Object.keys(series).map(Number).filter(n=>n<wk && (series[n]||[]).some(r=>r&&r.some(v=>v!==""))).sort((a,b)=>b-a);
     let ht=`<table class="htab"><thead><tr><th>Wk</th><th>Set</th>${cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>`;
     allWeeks.forEach(n=>{ (series[n]||[]).forEach((s,si)=>{ if(!s||!s.some(v=>v!=="")) return;
-      ht+=`<tr><td class="wk">W${n}</td><td>${rows>1?si+1:"—"}</td>${cols.map((c,ci)=>`<td>${esc(s[ci]||"")}</td>`).join("")}</tr>`; }); });
+      ht+=`<tr><td class="wk">W${n}</td><td>${it.primer?(si===0?"W":si):(rows>1?si+1:"—")}</td>${cols.map((c,ci)=>`<td>${esc(s[ci]||"")}</td>`).join("")}</tr>`; }); });
     ht+=`</tbody></table>`;
     hist=`<details class="hist"><summary>Compare previous weeks</summary>${ht}</details>`;
   }
@@ -773,7 +866,7 @@ function exCard(day, it){
     <div class="ex__top"><div class="ex__id">${esc(it.id)}</div>
       <div class="ex__head"><div class="ex__name">${esc(it.name)}</div>
         ${meta?`<div class="ex__meta">${meta}</div>`:""}${rest}</div></div>
-    ${subN}${notes}
+    ${it.primer?`<div class="ex__primer"><b>↑ Warm-up set (W)</b> — ${esc(it.primer)}. It’s the first row (W) in your log below.</div>`:""}${subN}${notes}
     <div class="ex__body">${circuit}${target}${demoHTML(it)}${it.log?logHTML(day,it):""}
       <div class="ex__actions">${timerBtn}
         <button class="btn btn--done" data-done="${esc(it.id)}">${done?'✓ Done':'Mark done'}</button></div>
@@ -793,7 +886,7 @@ function renderTrain(){
   if(day.type==="rest"){
     const k=blockKey(wk.week,day.day,"REST");
     html+=`<div class="ex"><div class="ex__body" style="padding:15px">
-      <p style="font-size:15px;margin:0">${esc(day.note)}</p>
+      ${day.walk?`<div class="restwalk"><span class="restwalk__ic">🚶</span><span>${esc(day.walk)}</span></div>`:""}<p style="font-size:14px;margin:0;color:var(--ink-2)">${esc(day.note)}</p>
       <div class="ex__actions" style="margin-top:14px">
         <button class="btn btn--done" data-done="REST">${store.done[k]?'✓ Done':'Mark done'}</button></div></div></div>`;
   } else {
@@ -844,8 +937,84 @@ function renderTrain(){
 }
 
 /* ============================ PROGRESS ============================ */
+function effortGuideHTML(){
+  return '<details class="guide"><summary><span class="guide__t">Effort guide · RPE &amp; heart rate</span><span class="guide__x">▼</span></summary>'
+   + '<div class="guide__b">'
+   + '<div class="guide__h">On the lifts — reps in reserve</div>'
+   + '<p class="guide__p">At the end of a set, ask how many clean reps you had left — that’s your RPE. When the target weight starts to feel easier than the target RPE, add a little load.</p>'
+   + '<table class="gtab"><thead><tr><th>RPE</th><th>Reps left</th><th>Feels like</th></tr></thead><tbody>'
+   + '<tr><td>6</td><td>4</td><td>Comfortable</td></tr>'
+   + '<tr><td>7</td><td>3</td><td>Working</td></tr>'
+   + '<tr class="hi"><td>8</td><td>2</td><td>Hard · 2 in the tank</td></tr>'
+   + '<tr><td>9</td><td>1</td><td>Very hard</td></tr>'
+   + '<tr><td>10</td><td>0</td><td>Max / failure</td></tr>'
+   + '</tbody></table>'
+   + '<div class="guide__h">On the cardio — Garmin heart-rate zones</div>'
+   + '<p class="guide__p">Set your zones in Garmin Connect (best from the watch’s lactate-threshold HR), then match effort to zone:</p>'
+   + '<table class="gtab"><thead><tr><th>Effort</th><th>RPE</th><th>Garmin zone</th></tr></thead><tbody>'
+   + '<tr><td>Easy / recovery</td><td>3–4</td><td>Zone 1–2</td></tr>'
+   + '<tr><td>Zone 2 steady</td><td>5–6</td><td>Zone 2</td></tr>'
+   + '<tr class="hi"><td>Hard interval</td><td>8–9</td><td>Zone 4</td></tr>'
+   + '<tr><td>All-out</td><td>10</td><td>Zone 5</td></tr>'
+   + '</tbody></table>'
+   + '<p class="guide__p guide__note">Getting fitter (time to push a little harder): same pace at a lower HR, faster HR recovery between intervals, or a rising VO₂ max estimate. HR lags and drifts — use it as a guide, not second-by-second.</p>'
+   + '</div></details>';
+}
+function fmtKg(n){ return (Math.round(n*10)/10).toFixed(1); }
+function weightChart(log, goal){
+  const W=320,H=130,pad=10,padB=16,padL=4,padR=4, n=log.length;
+  let kgs=log.map(e=>e.kg); if(goal!=null) kgs=kgs.concat([goal]);
+  let lo=Math.min.apply(null,kgs), hi=Math.max.apply(null,kgs);
+  if(hi-lo<2){ const mid=(hi+lo)/2; lo=mid-1.5; hi=mid+1.5; }
+  const span=hi-lo; lo-=span*0.1; hi+=span*0.1;
+  const x=i=> padL + (n<=1 ? (W-padL-padR)/2 : i*(W-padL-padR)/(n-1));
+  const y=v=> pad + (H-pad-padB)*(1-(v-lo)/(hi-lo));
+  const pts=log.map((e,i)=>x(i).toFixed(1)+","+y(e.kg).toFixed(1)).join(" ");
+  const dots=log.map((e,i)=>'<circle cx="'+x(i).toFixed(1)+'" cy="'+y(e.kg).toFixed(1)+'" r="3" fill="#4F46E5"/>').join("");
+  const path=n>=2 ? '<polyline points="'+pts+'" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' : "";
+  let gl=""; if(goal!=null){ const gy=y(goal).toFixed(1);
+    gl='<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="#16A34A" stroke-width="1.5" stroke-dasharray="4 3"/>'+
+       '<text x="'+(W-padR)+'" y="'+(y(goal)-4).toFixed(1)+'" text-anchor="end" font-size="9" fill="#0F7A38" font-family="monospace">goal</text>'; }
+  return '<svg class="wchart" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Weight trend">'+gl+path+dots+'</svg>';
+}
+function weightHTML(){
+  const log=(store.wlog||[]).slice().sort((a,b)=>a.d<b.d?-1:1);
+  const goal= log.length ? Math.round((log[0].kg-5)*10)/10 : null;
+  let body="";
+  if(log.length===0){
+    body='<div class="wempty">Log your weight to start tracking. Weekly, same time of day (e.g. first thing) gives the cleanest trend. Your goal line appears once you log the first entry.</div>';
+  } else {
+    const start=log[0].kg, cur=log[log.length-1].kg, chg=Math.round((cur-start)*10)/10;
+    const cls=chg<0?"down":chg>0?"up":"", chgStr=(chg>0?"+":"")+fmtKg(chg);
+    body='<div class="wstats">'+
+      '<div class="wstat"><div class="wstat__v">'+fmtKg(cur)+'</div><div class="wstat__l">Now · kg</div></div>'+
+      '<div class="wstat"><div class="wstat__v '+cls+'">'+chgStr+'</div><div class="wstat__l">Change · kg</div></div>'+
+      '<div class="wstat"><div class="wstat__v">'+fmtKg(goal)+'</div><div class="wstat__l">Goal · −5</div></div>'+
+      '</div>'+weightChart(log, goal);
+  }
+  const items=log.slice().reverse().slice(0,10).map(e=>'<span class="witem">'+esc(e.d.slice(5))+' · '+fmtKg(e.kg)+'<button data-wdel="'+esc(e.d)+'" aria-label="Delete entry">✕</button></span>').join("");
+  return '<div class="wcard"><div class="wcard__h"><div class="wcard__t">Body Weight</div>'+
+    (goal!=null?'<div class="wcard__g">Target '+fmtKg(goal)+' kg</div>':'')+'</div>'+
+    '<div class="wform"><input id="wInput" inputmode="decimal" placeholder="Today’s weight (kg)"><button id="wAdd">Log</button></div>'+
+    body+(items?'<div class="wlist">'+items+'</div>':'')+'</div>';
+}
+function wireWeight(){
+  const inp=$("#wInput"), add=$("#wAdd");
+  if(add) add.onclick=()=>{
+    const v=parseFloat(String(inp.value||"").replace(",","."));
+    if(!isFinite(v)||v<=0||v>400){ if(inp) inp.focus(); return; }
+    const d=new Date(), ds=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    if(!store.wlog) store.wlog=[];
+    const ex=store.wlog.find(e=>e.d===ds);
+    if(ex) ex.kg=Math.round(v*10)/10; else store.wlog.push({d:ds, kg:Math.round(v*10)/10});
+    persist(); renderProgress();
+  };
+  $("#progView").querySelectorAll("[data-wdel]").forEach(b=>b.onclick=()=>{
+    store.wlog=(store.wlog||[]).filter(e=>e.d!==b.dataset.wdel); persist(); renderProgress();
+  });
+}
 function renderProgress(){
-  let html="";
+  let html=weightHTML()+effortGuideHTML();
   PROGRAM.weeks.forEach(wk=>{
     const done=wk.days.filter(d=>dayDone(wk.week,d)).length, total=wk.days.length;
     html+=`<div class="progweek"><div class="progweek__h"><div class="progweek__t">Week ${wk.week}</div>
@@ -864,6 +1033,7 @@ function renderProgress(){
     Keep each exercise's <b>name</b> identical week to week so your logs line up for the week-on-week comparison.
     Everything you log and tick is saved on this device.</div></details>`;
   $("#progView").innerHTML=html;
+  wireWeight();
 }
 
 /* ============================ TIMER ENGINE ============================ */
